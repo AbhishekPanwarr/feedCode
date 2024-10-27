@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .code-input {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .username-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            margin: 20px 0;
+        }
+
+        .submit-btn {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background-color: #357ae8;
+        }
+
+        .slide-left-enter {
+            animation: slide-left 0.5s forwards;
+        }
+
+        .slide-right-enter {
+            animation: slide-right 0.5s forwards;
+        }
+
+        @keyframes slide-left {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slide-right {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="text" id="username" class="username-input" placeholder="Enter your username" required>
+
+        <div id="question-container">
+            <p class="question" id="question-text">Question 1: Describe your solution to this problem?</p>
+            <textarea class="code-input" id="answer" placeholder="Type your answer here..."></textarea>
+        </div>
+        
+        <div class="button-group">
+            <button id="prev-btn" onclick="showPreviousQuestion()">←</button>
+            <button id="next-btn" onclick="showNextQuestion()">→</button>
+        </div>
+        
+        <button class="submit-btn" onclick="submitAnswers()">Submit Answers</button>
+    </div>
+
+    <script>
+        const questions = [
+            "Describe your solution to this problem?",
+            "How would you handle error cases?",
+            "What is the time complexity of your approach?",
+            "Explain any assumptions you made.",
+            "List any optimizations you can think of."
+        ];
+        let currentQuestionIndex = 0;
+        const answers = [];
+
+        const questionText = document.getElementById("question-text");
+        const answerInput = document.getElementById("answer");
+        const usernameInput = document.getElementById("username");
+
+        function updateQuestion() {
+            questionText.classList.remove('slide-left-enter', 'slide-right-enter');
+            questionText.textContent = `Question ${currentQuestionIndex + 1}: ${questions[currentQuestionIndex]}`;
+            answerInput.value = answers[currentQuestionIndex] || "";
+        }
+
+        function showNextQuestion() {
+            answers[currentQuestionIndex] = answerInput.value;
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            questionText.classList.add('slide-left-enter');
+            updateQuestion();
+        }
+
+        function showPreviousQuestion() {
+            answers[currentQuestionIndex] = answerInput.value;
+            currentQuestionIndex = (currentQuestionIndex - 1 + questions.length) % questions.length;
+            questionText.classList.add('slide-right-enter');
+            updateQuestion();
+        }
+
+        function submitAnswers() {
+            answers[currentQuestionIndex] = answerInput.value;
+
+            const username = usernameInput.value.trim();
+            if (!username) {
+                alert("Please enter your username.");
+                return;
+            }
+
+            // Send answers to the backend with the username
+            fetch(`/submit_answers/${username}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ answers })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    // Optionally redirect to another page
+                    // window.location.href = '/some-other-page';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Initialize with the first question
+        updateQuestion();
+    </script>
+</body>
+</html>

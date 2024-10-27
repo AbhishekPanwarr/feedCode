@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/signup.css')}}">
+    <title>Signup Page</title>
+</head>
+<body>
+    <div class="container">
+        <h1>FeedCode Signup</h1>
+        <form id="signup-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <div class="questions-container">
+                <div class="question-navigation">
+                    <button type="button" id="prev-btn" onclick="showPreviousQuestion()">←</button>
+                    <textarea class="question-answer" id="question-answer" placeholder="Answer the question here..." required></textarea>
+                    <button type="button" id="next-btn" onclick="showNextQuestion()">→</button>
+                </div>
+                <div class="question-indicator" id="question-indicator">
+                    Question 1: What is your greatest strength?
+                </div>
+            </div>
+            <button type="submit">Signup</button>
+        </form>
+        <p class="account-exist">Account already exists? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+
+    <script  src="{{ url_for('static', filename='js/signup.js')}}" data-turbolinks-track="reload"></script>
+</body>
+</html>

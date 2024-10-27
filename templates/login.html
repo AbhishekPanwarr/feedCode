@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedcode - Login</title>
+    <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/login.css')}}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">Feedcode</div>
+        <div class="form-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required><br>
+                <input type="password" id="password" placeholder="Password" required><br>
+                <button type="submit">Login</button>
+            </form>
+            <div class="switch">
+                <a href="{{ url_for('signupPage') }}">Don't have an account? Signup</a>
+            </div>
+        </div>
+    </div>
+    <script  src="{{ url_for('static', filename='js/login.js')}}" data-turbolinks-track="reload"></script>
+</body>
+</html>
