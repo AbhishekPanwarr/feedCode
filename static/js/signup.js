@@ -31,9 +31,9 @@ document.getElementById('signup-form').addEventListener('submit', function(event
     .then(response => response.json())
     .then(data => {
         alert(data.message);
-        if (data.success) {
+        if (data.status === "created"){
             // Redirect to questions page or another appropriate page
-            window.location.href = "{{ url_for(login) }}";
+            window.location.href = data.redirect;
         }
     })
     .catch(error => console.error('Error:', error));
