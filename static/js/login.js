@@ -8,11 +8,12 @@ document.getElementById('login-form').addEventListener('submit', (e) => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
+        credentials: "include"
     })
     .then(response => response.json())
     .then(data => {
-        if (data.redirect) {
+        if (data.status === "logged_in") {
             // Redirect to the coding page if redirect URL is provided
             window.location.href = data.redirect;
         } else if (data.error) {
