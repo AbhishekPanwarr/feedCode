@@ -1,84 +1,267 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(
+        45deg,
+        #4facfe 0%,
+        #00f2fe 50%,
+        #ffffff 100%
+    );
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     margin: 0;
+    padding: 12px;
+    color: #2d3748;
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Container Styles */
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    box-shadow: 
+        0 8px 32px rgba(31, 38, 135, 0.2),
+        0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden; /* Removes scrollbar */
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    position: relative;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #4facfe, #00f2fe, #ffffff);
+    z-index: -1;
+    border-radius: 18px;
+    opacity: 0.6;
+    filter: blur(5px);
 }
 
 .container {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    width: 90%;
-    max-width: 500px;
+    display: grid;
+    place-items: center;  /* This centers the content both horizontally and vertically */
+    height: 100vh;        /* Ensure the container takes full height of the viewport */
+}
+
+/* Styling the image */
+.image {
+    width: 20%; /* Makes the image take up the full width of the container */
+    height: auto; /* Maintains aspect ratio */
+    border-radius: 12px; /* Optional: rounded corners */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Optional: add a shadow */
+    margin-bottom: 1rem; /* Adds spacing below the image */
+}
+
+/* Typography */
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #425473;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.025em;
     text-align: center;
 }
 
-h1 {
-    margin-bottom: 20px;
+
+input::placeholder,
+textarea::placeholder {
+    color: #9aa5b1;
+    font-style: italic;
+    font-size: 0.85rem;
 }
 
+/* Form Elements */
 input[type="text"],
 input[type="email"],
 input[type="password"],
 textarea {
     width: 100%;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 2px solid rgba(173, 216, 230, 0.5);
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1)
+}
+
+.container {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #4facfe;
+    box-shadow: 0 0 12px rgba(79, 172, 254, 0.3);
+    background: rgba(255, 255, 255, 1);
 }
 
 textarea {
-    height: 100px; /* Adjust height for answer input */
-    resize: none;  /* Prevent resizing */
+    height: 80px;
+    resize: vertical;
+    min-height: 60px;
+    max-height: 200px;
+    line-height: 1.4;
 }
 
+/* Button Styles */
 button {
-    background-color: #4285f4;
+    background: linear-gradient(45deg, #005bea, #00c6fb);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
     cursor: pointer;
     width: 100%;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
 button:hover {
-    background-color: #357ae8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(79, 172, 254, 0.5);
 }
 
+button:active {
+    transform: translateY(1px);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+/* Account Link Styles */
 .account-exist {
-    margin-top: 10px;
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: #4a5568;
+    text-align: center;
 }
 
+.account-exist a {
+    color: #4facfe;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    background: linear-gradient(45deg, #005bea, #00c6fb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.account-exist a:hover {
+    opacity: 0.8;
+}
+
+/* Questions Container */
 .questions-container {
-    margin: 20px 0;
+    margin: 1rem 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
 }
 
+/* Question Navigation */
 .question-navigation {
-    display: flex;
-    align-items: center;
-    width: 100%;
+    display: flex; /* Ensure buttons and the textarea are in the same line */
+    justify-content: space-between; /* Spread the buttons to the sides */
+    align-items: center; /* Vertically align items */
 }
 
+/* Question Textarea */
+textarea {
+    flex-grow: 1; /* Allow the textarea to expand and fill available space */
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    resize: none; /* Optional: Prevent resizing */
+}
+
+/* Question Navigation Buttons */
 .question-navigation button {
-    flex: 0 0 50px; /* Fixed width for buttons */
+    width: auto;
+    min-width: 40px;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    background: linear-gradient(45deg, #005bea, #00c6fb);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.question-answer {
-    flex: 1; /* Allow textarea to take remaining space */
-    margin: 0 10px;
+.question-navigation button:hover {
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    transform: translateY(-2px);
 }
 
-.question-indicator {
-    margin-top: 10px;
-    font-weight: bold;
+.question-navigation button:active {
+    transform: translateY(1px);
+}
+
+/* Spacing for buttons */
+.question-navigation button:first-child {
+    margin-right: 1rem; /* Add space between the left button and the textarea */
+}
+
+.question-navigation button:last-child {
+    margin-left: 1rem; /* Add space between the textarea and the right button */
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 1.25rem;
+    }
 }

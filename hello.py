@@ -4,6 +4,8 @@ from datetime import datetime
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
 from flask_pymongo import PyMongo
 from email_validator import validate_email, EmailNotValidError
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 from passlib.hash import sha256_crypt
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -16,10 +18,15 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": f"{os.getenv('CLIENT_URL')}"}}, supports_credentials=True)
 app.config["JWT_SECRET_KEY"] = f"{os.getenv('JWT_SECRET_KEY')}"
-app.config['MONGO_URI'] = f"{os.getenv('MONGO_URI')}"
-mongo = PyMongo(app)
 jwt = JWTManager(app)
+uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers"
+client = MongoClient(uri, server_api=ServerApi('1'))
+mongo = client.get_database('FeedCode')
 
+
+@app.route("/")
+def index():
+    return f"FeedCode Index page"
 
 @app.route("/login_page")
 def login():
