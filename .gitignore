@@ -1,5 +1,5 @@
 # Ignore .env file
 .env
-
+venv_feedcode/
 # Ignore __pycache__ directories
 __pycache__/
