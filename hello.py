@@ -78,7 +78,7 @@ def loginUser():
 
 @app.route('/signup_page', methods=["GET"])
 def signupPage():
-    return render_template('signup_2.html') 
+    return render_template('signup.html') 
 
 
 @app.route('/scrape', methods=["POST", "GET"])
