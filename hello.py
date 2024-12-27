@@ -1,4 +1,6 @@
 import os
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 from flask import Flask, request, jsonify, make_response, render_template, redirect, url_for
 from datetime import datetime
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, JWTManager
@@ -12,6 +14,7 @@ from dotenv import load_dotenv
 import prompting
 from calling import reasoning
 import time
+from cses_scraper import main
 
 load_dotenv()
 
@@ -23,6 +26,25 @@ uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@fe
 client = MongoClient(uri, server_api=ServerApi('1'))
 mongo = client.get_database('FeedCode')
 
+uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers"
+client = MongoClient(uri, server_api=ServerApi('1'))
+mongo = client.get_database('FeedCode')
+
+# Check MongoDB connection
+@app.route('/ping-db', methods=['GET'])
+def ping_db():
+    client = MongoClient(uri, server_api=ServerApi('1'))
+    try:
+        client.admin.command('ping')
+        return make_response(jsonify({"message": f"Pinged your deployment. You successfully connected to MongoDB!",}),201)
+    except Exception as e:
+        return make_response(jsonify({"message": f"connection failed",}),201)
+    
+    
+
+@app.route("/")
+def index():
+    return f"FeedCode Index page"
 
 @app.route("/")
 def index():
@@ -37,10 +59,10 @@ def login():
 def loginUser():
     username = request.json.get("username")
     password = request.json.get("password")
+    users_collection = mongo.get_collection('users')
+    if sha256_crypt.verify(password, users_collection.find_one({"username":username})["password"]):
 
-    if sha256_crypt.verify(password, mongo.db.users.find_one({"username":username})["password"]):
-
-        _id = str(mongo.db.users.find_one({"username":username})["_id"])
+        _id = str(users_collection.find_one({"username":username})["_id"])
         access_token = create_access_token(identity=str(_id))
         response = make_response(jsonify({
             "message": "login successful",
@@ -62,35 +84,64 @@ def loginUser():
 def signupPage():
     return render_template('signup.html') 
 
-@app.route('/signup', methods=["POST", "GET"])
+
+@app.route('/scrape', methods=["POST", "GET"])
+def scrape():
+    cses_username = request.json.get("cses_username", None)
+    cses_password = request.json.get("cses_password", None)
+
+    main(cses_username,cses_password)
+    
+    response = make_response(jsonify({
+        "message": f"user solution successfully scrapped",
+        "status" : "created",
+    }),201)
+    return response
+
+@app.route('/generate-reasoning', methods=["POST", "GET"])
+def get_reasoning():
+    problem_names = [sol for sol in os.listdir("./solved_problems")]
+    answers = []
+    for problem_name in problem_names:
+        with open(f"./solved_problems/{problem_name}") as sol:
+            text = sol.read()
+            answers.append(text)
+    prompt = prompting.prompt(answers)
+    reasoning_gemini = reasoning(prompt)
+    with open('userReasoning.txt','w') as myfile:
+        myfile.write(reasoning_gemini[9:-4].strip())
+    
+    for problem_name in problem_names:
+        try:
+            os.remove(f'./solved_problems/{problem_name}')
+        except FileNotFoundError:
+            print("File does not exist")
+        
+
+    response = make_response(jsonify({
+        "message": f"Reasoning saved",
+        "status" : "Generated",
+    }),201)
+    return response
+
+@app.route('/register', methods=["POST", "GET"])
 def signupUser():
     username = request.json.get("username", None)
     password = request.json.get("password", None)
-    email = request.json.get("email", None)
-    answers = request.json.get("answers", None)
-    prompt = prompting.prompt(answers)
-    reasoning_gemini = reasoning(prompt)
+    reasoning_gemini  = ''
+    with open("userReasoning.txt") as file:
+        text = file.read()
+        reasoning_gemini += text
+    
 
-    time.sleep(5)
-     
-
-    if not username or not password or not email:
+    if not username or not password:
         return jsonify({
             "message": "Invalid request, please try again"
         }), 400
     
+    users_collection = mongo.get_collection('users')
 
-    try:
-        valid = validate_email(email)
-        email = valid.email
-    except EmailNotValidError as err:
-        return jsonify({
-            "error":str(err)
-        }), 400
-    
-    users_collection = mongo.db.users
-
-    if users_collection.find_one({"username": username}) or users_collection.find_one({"email": email}):
+    if users_collection.find_one({"username": username}):
 
         return jsonify({
             "message": "user with the given username or email already exists"
@@ -102,18 +153,12 @@ def signupUser():
     _id = users_collection.insert_one({
         "username":username,
         "password": password,
-        "email":email,
         "created_at":datetime.now(),
-        "sol1": answers[0],
-        "sol2": answers[1],
-        "sol3": answers[2],
-        "sol4": answers[3],
-        "sol5": answers[4],
         "reasoning": str(reasoning_gemini)
     }).inserted_id
 
     response = make_response(jsonify({
-        "message": f"user {username} created successfully",
+        "message": f"user with username: {username} created successfully",
         "status" : "created",
         "redirect" : url_for("login")
     }),201)
