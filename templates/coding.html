@@ -3,39 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FeedCode - Coding Interface</title>
+    <title>Web Code Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/coding.css')}}">
 </head>
 <body>
-    <div class="container">
-        <!-- Main coding area -->
-        <div class="code-section">
+    <div class="editor-container">
+        <div class="sidebar">
+            <div class="sidebar-icon">📁</div>
+            <div class="sidebar-icon">🔍</div>
+            <div class="sidebar-icon">📦</div>
+        </div>
+        <div class="main-content">
             <div class="editor-header">
-                <h2>Code Editor</h2>
-                <button id="submitCode" class="submit-btn">Submit Code</button>
+                <div class="editor-actions">
+                    <button id="submitCode">Submit Code</button>
+                </div>
             </div>
-            <div class="editor-container">
-                <textarea id="codeEditor" placeholder="Write your code here..."></textarea>
-            </div>
-        </div>
-
-        <!-- Feedback panel -->
-        <div class="feedback-section">
-            <div class="feedback-header">
-                <h2>Feedback</h2>
-            </div>
-            <div id="feedbackContainer" class="feedback-container">
-                <div class="empty-feedback">Submit your code to get feedback</div>
+            <div class="editor-wrapper">
+                <div class="code-area">
+                    <div class="line-numbers"></div>
+                    <textarea id="codeEditor" spellcheck="false" placeholder="Enter your code here..."></textarea>
+                    <div id="loadingOverlay" class="loading-overlay hidden">
+                        <div class="loader">Loading...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Loading overlay -->
-    <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="loader"></div>
-        <p>Getting Feedback...</p>
-    </div>
-
+    <div id="feedbackContainer" class="notification-container"></div>
     <script  src="{{ url_for('static', filename='js/coding.js')}}" data-turbolinks-track="reload"></script>
 </body>
 </html>

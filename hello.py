@@ -26,10 +26,6 @@ uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@fe
 client = MongoClient(uri, server_api=ServerApi('1'))
 mongo = client.get_database('FeedCode')
 
-uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers"
-client = MongoClient(uri, server_api=ServerApi('1'))
-mongo = client.get_database('FeedCode')
-
 # Check MongoDB connection
 @app.route('/ping-db', methods=['GET'])
 def ping_db():
@@ -63,7 +59,7 @@ def loginUser():
         response = make_response(jsonify({
             "message": "login successful",
             "status": "logged_in",
-            "redirect" : url_for("coding", username=username)
+            "redirect" : url_for("codingPage", username=username)
         }),201)
 
         response.set_cookie('access_token', access_token, httponly=False, secure=False, samesite='None', domain='localhost', path='/')
@@ -164,8 +160,14 @@ def signupUser():
 
 @app.route("/coding/<username>")
 # @jwt_required()
-def coding(username):
+def codingPage(username):
     return render_template('coding.html')
+
+@app.route("/coding/feedback/<username>/")
+# @jwt_required()
+def coding(username):
+    #Feedback Logic
+    return None
 
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.getenv("PORT")))
