@@ -3,17 +3,7 @@ def refr(code):
     return one_liner
 
 
-masters_code_li = []
-with open("./masters_code.txt", "r") as my_code:
-        codes = my_code.read()
-        code_li = codes.split('-----')
-        for code in code_li:
-            sample_code = ''''''
-            sample_code += code
-            masters_code_li.append(sample_code)
-
-
-def prompt(tester_list, master_list=masters_code_li):
+def prompt(tester_list, master_list):
 
     prompt = f''''''
 

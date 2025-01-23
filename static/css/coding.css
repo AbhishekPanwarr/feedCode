@@ -85,19 +85,21 @@ button:disabled {
 .editor-wrapper {
     flex: 1;
     display: flex;
+    position: relative;
     overflow: hidden;
 }
 
 .code-area {
     flex: 1;
-    background: #1e1e1e;
-    padding: 20px;
+    display: flex;
     position: relative;
+    background: #1e1e1e;
+    overflow: hidden;
 }
 
 #codeEditor {
-    width: 100%;
-    height: 100%;
+    flex: 1;
+    padding: 10px;
     background: transparent;
     border: none;
     color: #d4d4d4;
@@ -105,8 +107,9 @@ button:disabled {
     font-size: 14px;
     line-height: 1.5;
     resize: none;
-    padding: 10px;
     outline: none;
+    overflow: auto;
+    white-space: pre;
 }
 
 .loading-overlay {
@@ -176,12 +179,9 @@ button:disabled {
 }
 
 .line-numbers {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    flex-shrink: 0;
     width: 40px;
-    padding: 30px 5px;
+    padding: 10px 5px;
     background: #1e1e1e;
     border-right: 1px solid #404040;
     color: #858585;
