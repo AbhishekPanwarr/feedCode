@@ -3,9 +3,19 @@ const codeEditor = document.getElementById('codeEditor');
 const submitButton = document.getElementById('submitCode');
 const feedbackContainer = document.getElementById('feedbackContainer');
 const loadingOverlay = document.getElementById('loadingOverlay');
+const lineNumbers = document.querySelector('.line-numbers');
 
 // State
 let isLoading = false;
+
+// Line Numbers
+function updateLineNumbers() {
+    const lines = codeEditor.value.split('\n').length;
+    lineNumbers.innerHTML = Array(lines)
+        .fill(0)
+        .map((_, i) => `<div>${i + 1}</div>`)
+        .join('');
+}
 
 // API Functions
 async function getFeedback(code) {
@@ -49,20 +59,14 @@ function createFeedbackElement(feedback) {
     feedbackItem.appendChild(title);
     feedbackItem.appendChild(message);
 
+    setTimeout(() => {
+        feedbackItem.remove();
+    }, 5000);
+
     return feedbackItem;
 }
 
 function updateFeedbackDisplay(feedbackItems) {
-    feedbackContainer.innerHTML = '';
-    
-    if (feedbackItems.length === 0) {
-        const emptyMessage = document.createElement('div');
-        emptyMessage.className = 'empty-feedback';
-        emptyMessage.textContent = 'Submit your code to get feedback';
-        feedbackContainer.appendChild(emptyMessage);
-        return;
-    }
-
     feedbackItems.forEach(item => {
         const feedbackElement = createFeedbackElement(item);
         feedbackContainer.appendChild(feedbackElement);
@@ -103,20 +107,13 @@ async function handleSubmit() {
     }
 }
 
-// Auto-resize textarea
-function adjustTextareaHeight() {
-    codeEditor.style.height = 'auto';
-    codeEditor.style.height = `${codeEditor.scrollHeight}px`;
-}
-
 // Event Listeners
 submitButton.addEventListener('click', handleSubmit);
-codeEditor.addEventListener('input', adjustTextareaHeight);
+codeEditor.addEventListener('input', updateLineNumbers);
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // Set initial state
-    updateFeedbackDisplay([]);
+    updateLineNumbers();
     
     // Enable tab key in textarea
     codeEditor.addEventListener('keydown', function(e) {
@@ -127,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
             this.selectionStart = this.selectionEnd = start + 4;
+            updateLineNumbers();
         }
     });
 });

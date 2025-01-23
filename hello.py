@@ -26,10 +26,6 @@ uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@fe
 client = MongoClient(uri, server_api=ServerApi('1'))
 mongo = client.get_database('FeedCode')
 
-uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers"
-client = MongoClient(uri, server_api=ServerApi('1'))
-mongo = client.get_database('FeedCode')
-
 # Check MongoDB connection
 @app.route('/ping-db', methods=['GET'])
 def ping_db():
@@ -67,7 +63,7 @@ def loginUser():
         response = make_response(jsonify({
             "message": "login successful",
             "status": "logged_in",
-            "redirect" : url_for("coding", username=username)
+            "redirect" : url_for("codingPage", username=username)
         }),201)
 
         response.set_cookie('access_token', access_token, httponly=False, secure=False, samesite='None', domain='localhost', path='/')
@@ -91,7 +87,7 @@ def scrape():
     cses_password = request.json.get("cses_password", None)
 
     main(cses_username,cses_password)
-    
+
     response = make_response(jsonify({
         "message": f"user solution successfully scrapped",
         "status" : "created",
@@ -100,14 +96,29 @@ def scrape():
 
 @app.route('/generate-reasoning', methods=["POST", "GET"])
 def get_reasoning():
-    problem_names = [sol for sol in os.listdir("./solved_problems")]
+    problem_names = sorted([sol for sol in os.listdir("./solved_problems")], reverse=True)[0:5]
+    problem_names_db = []
     answers = []
+    master_answers = []
+
+    for problem in problem_names:
+        name = problem.split(" ")[1:]
+        name = " ".join(name)
+        problem_names_db.append(name[:-2])
+
     for problem_name in problem_names:
         with open(f"./solved_problems/{problem_name}") as sol:
             text = sol.read()
             answers.append(text)
-    prompt = prompting.prompt(answers)
+
+    solutions_db = mongo.get_collection('Solutions')
+    for problem in problem_names_db:
+        x = solutions_db.find({"name": problem})['answer']
+        master_answers.append(x)
+        
+    prompt = prompting.prompt(tester_list=answers, master_list=master_answers)
     reasoning_gemini = reasoning(prompt)
+    
     with open('userReasoning.txt','w') as myfile:
         myfile.write(reasoning_gemini[9:-4].strip())
     
@@ -168,8 +179,14 @@ def signupUser():
 
 @app.route("/coding/<username>")
 # @jwt_required()
-def coding(username):
+def codingPage(username):
     return render_template('coding.html')
+
+@app.route("/coding/feedback/<username>/")
+# @jwt_required()
+def coding(username):
+    #Feedback Logic
+    return None
 
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.getenv("PORT")))

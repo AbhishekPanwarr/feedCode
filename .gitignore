@@ -1,5 +1,6 @@
 # Ignore .env file
 .env
-venv_feedcode/
+feedcode/
+solved_problems/
 # Ignore __pycache__ directories
 __pycache__/

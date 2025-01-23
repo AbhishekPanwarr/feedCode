@@ -70,13 +70,14 @@ def GetSolution(session_requests, code_link):
 
 # Saves the solution to disk.
 # Saves the solution to disk with the problem name in the filename.
-def SaveTask(session_requests, task_id):
+# Saves the solution to disk with the index and problem name in the filename.
+def SaveTask(session_requests, task_id, index):
     task_results_url = session_requests.get(results_url + task_id)
     tree = html.fromstring(task_results_url.content)
     
     # Extract the problem name
     problem_name_element = tree.xpath("//h1")
-    problem_name = problem_name_element[0].text.strip().replace(" ", "_") if problem_name_element else task_id
+    problem_name = problem_name_element[0].text.strip() if problem_name_element else task_id
     
     rows = tree.xpath("//*/table[@class='wide']/tr")
     for row in rows:
@@ -87,13 +88,14 @@ def SaveTask(session_requests, task_id):
             continue
 
         if not IsGreenTick(columns[4]):
+		
             continue
 
         print(f"Saving solution for task: {problem_name}")
         code_link = columns[5].xpath("a")[0].attrib['href']
 
-        # Save the file with the problem name and appropriate extension
-        file_path = os.path.join(directory, f"{problem_name}.{language_extension[language]}")
+        # Save the file with the index, problem name, and appropriate extension
+        file_path = os.path.join(directory, f"{index} {problem_name}.{language_extension[language]}")
         with open(file_path, "w+") as file:
             file.write(GetSolution(session_requests, "https://cses.fi" + code_link))
         break
@@ -103,20 +105,21 @@ def SaveTask(session_requests, task_id):
 
 # Runs the entire scraping flow.
 def main(username, password):
-	print("Enter your cses.fi account details")
-	
-	print("Logging in your account ...")
-	session_requests = requests.session()
-	Login(username, password, session_requests)
+    print("Enter your cses.fi account details")
+    
+    print("Logging in your account ...")
+    session_requests = requests.session()
+    Login(username, password, session_requests)
 
-	if not os.path.exists(directory):
-		os.makedirs(directory)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
-	solved_tasks = GetSolvedProblems(session_requests)
-	print("You have solved", len(solved_tasks), "tasks.")
-	for task_id in solved_tasks:
-		SaveTask(session_requests, task_id)
+    solved_tasks = GetSolvedProblems(session_requests)
+    print("You have solved", len(solved_tasks), "tasks.")
+    for index, task_id in enumerate(solved_tasks, start=1):
+        SaveTask(session_requests, task_id, index)
 
-	Logout(session_requests)
-	print("Logged out")
-	return
+    Logout(session_requests)
+    print("Logged out")
+    return
+
