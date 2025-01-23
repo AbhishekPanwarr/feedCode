@@ -83,7 +83,7 @@ def scrape():
     cses_password = request.json.get("cses_password", None)
 
     main(cses_username,cses_password)
-    
+
     response = make_response(jsonify({
         "message": f"user solution successfully scrapped",
         "status" : "created",
@@ -92,14 +92,29 @@ def scrape():
 
 @app.route('/generate-reasoning', methods=["POST", "GET"])
 def get_reasoning():
-    problem_names = [sol for sol in os.listdir("./solved_problems")]
+    problem_names = sorted([sol for sol in os.listdir("./solved_problems")], reverse=True)[0:5]
+    problem_names_db = []
     answers = []
+    master_answers = []
+
+    for problem in problem_names:
+        name = problem.split(" ")[1:]
+        name = " ".join(name)
+        problem_names_db.append(name[:-2])
+
     for problem_name in problem_names:
         with open(f"./solved_problems/{problem_name}") as sol:
             text = sol.read()
             answers.append(text)
-    prompt = prompting.prompt(answers)
+
+    solutions_db = mongo.get_collection('Solutions')
+    for problem in problem_names_db:
+        x = solutions_db.find({"name": problem})['answer']
+        master_answers.append(x)
+        
+    prompt = prompting.prompt(tester_list=answers, master_list=master_answers)
     reasoning_gemini = reasoning(prompt)
+    
     with open('userReasoning.txt','w') as myfile:
         myfile.write(reasoning_gemini[9:-4].strip())
     
