@@ -3,35 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Code Editor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Code Editor</title>
     <link rel="stylesheet" media="all" href="{{ url_for('static', filename='css/coding.css')}}">
 </head>
 <body>
-    <div class="editor-container">
-        <div class="sidebar">
-            <div class="sidebar-icon">📁</div>
-            <div class="sidebar-icon">🔍</div>
-            <div class="sidebar-icon">📦</div>
-        </div>
-        <div class="main-content">
-            <div class="editor-header">
-                <div class="editor-actions">
-                    <button id="submitCode">Submit Code</button>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                <h1>Code Editor</h1>
+            </div>
+            <button id="submitButton" class="submit-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                Submit Code
+            </button>
+        </header>
+
+        <main class="editor-container">
+            <!-- Editor Section -->
+            <div class="editor-section">
+                <div class="editor-wrapper">
+                    <div class="line-numbers" id="lineNumbers"></div>
+                    <textarea id="codeEditor" spellcheck="false" placeholder="Enter your code here..."></textarea>
                 </div>
             </div>
-            <div class="editor-wrapper">
-                <div class="code-area">
-                    <div class="line-numbers"></div>
-                    <textarea id="codeEditor" spellcheck="false" placeholder="Enter your code here..."></textarea>
-                    <div id="loadingOverlay" class="loading-overlay hidden">
-                        <div class="loader">Loading...</div>
+
+            <!-- Feedback Section -->
+            <div class="feedback-section">
+                <h2>Feedback</h2>
+                <div id="feedbackContent" class="feedback-content">
+                    <div id="loadingSpinner" class="loading-spinner hidden"></div>
+                    <div id="initialMessage" class="initial-message">
+                        Submit your code to see feedback
+                    </div>
+                    <div id="feedbackWrapper" class="feedback-wrapper hidden">
+                        <div class="feedback-summary">
+                            <h3>Summary</h3>
+                            <p id="feedbackSmall"></p>
+                        </div>
+                        <button id="toggleDetailed" class="toggle-button">
+                            <svg id="chevronIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                            <span id="toggleText">View Detailed Feedback</span>
+                        </button>
+                        <div id="detailedFeedback" class="detailed-feedback hidden">
+                            <pre id="feedbackDetailed"></pre>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
-    <div id="feedbackContainer" class="notification-container"></div>
     <script  src="{{ url_for('static', filename='js/coding.js')}}" data-turbolinks-track="reload"></script>
 </body>
 </html>

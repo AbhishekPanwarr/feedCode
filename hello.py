@@ -42,10 +42,6 @@ def ping_db():
 def index():
     return f"FeedCode Index page"
 
-@app.route("/")
-def index():
-    return f"FeedCode Index page"
-
 @app.route("/login_page")
 def login():
     return render_template("login.html")
@@ -182,11 +178,43 @@ def signupUser():
 def codingPage(username):
     return render_template('coding.html')
 
-@app.route("/coding/feedback/<username>/")
-# @jwt_required()
+
+@app.route("/api/feedback/<username>", methods=["POST", "GET"])
 def coding(username):
-    #Feedback Logic
-    return None
+    users_collection = mongo.get_collection('users')
+
+    user_dict = users_collection.find_one({"username": username})
+    reason = user_dict["reasoning"]
+    current_input = request.json.get("code", None)
+    with open("prompt_LLM2.txt") as file:
+        prompt = file.read()
+    final_prompt_small = f"""
+        {prompt}
+        (1) Reasoning Dictionary:
+        {reason}
+        (2) Current User Code:
+        {current_input}\n
+        limit your response to 30 words
+    """
+
+    final_prompt_detailed = f"""
+        {prompt}
+        (1) Reasoning Dictionary:
+        {reason}
+        (2) Current User Code:
+        {current_input}\n
+    """
+
+    feedback_gemini_small = reasoning(final_prompt_small)
+    feedback_gemini = reasoning(final_prompt_detailed)
+    response = make_response(jsonify({
+        "message": "Feedback generated",
+        "feedback_small": feedback_gemini_small,
+        "feedback_detailed": feedback_gemini
+    }),200)
+
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=int(os.getenv("PORT")))
