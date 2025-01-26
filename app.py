@@ -22,7 +22,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": f"{os.getenv('CLIENT_URL')}"}}, supports_credentials=True)
 app.config["JWT_SECRET_KEY"] = f"{os.getenv('JWT_SECRET_KEY')}"
 jwt = JWTManager(app)
-uri = f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers"
+uri = f'mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers'
 client = MongoClient(uri, server_api=ServerApi('1'))
 mongo = client.get_database('FeedCode')
 
@@ -217,4 +217,4 @@ def coding(username):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.getenv("PORT")))
+    app.run(port=int(os.getenv("PORT")))
