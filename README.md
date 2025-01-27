@@ -17,6 +17,7 @@ This project is developed under the **Data Science Group (DSG)** and is implemen
 ---
 
 ## How It Works  
+![Sample Image](archi.png)
 
 1. **Coding Style Analysis**: Scrape the solutions of frequently solved questions to generate a personalized coding style reasoning.  
 2. **Comparison with Master Solutions**: Compare the user's current code snippet with master solutions of the same questions.  
