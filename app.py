@@ -18,7 +18,7 @@ from cses_scraper import main
 
 load_dotenv()
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app, resources={r"/*": {"origins": f"{os.getenv('CLIENT_URL')}"}}, supports_credentials=True)
 app.config["JWT_SECRET_KEY"] = f"{os.getenv('JWT_SECRET_KEY')}"
 jwt = JWTManager(app)
