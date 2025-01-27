@@ -62,12 +62,12 @@ This project is developed under the **Data Science Group (DSG)** and is implemen
 4. Set up the .env file:
 
    Create a .env file in the root directory with the following keys:
-   JWT_SECRET_KEY=<ANY>
-   MONGO_USER=<MONGO_USERNAME>
-   MONGO_PASSWORD=<MONGO_PASSWORD>
-   CLIENT_URL=http://localhost:3000
-   GEMINI_API_KEY=<YOUR_API_KEY>
-   PORT=5000
+   - JWT_SECRET_KEY=<ANY>
+   - MONGO_USER=<MONGO_USERNAME>
+   - MONGO_PASSWORD=<MONGO_PASSWORD>
+   - CLIENT_URL=http://localhost:3000
+   - GEMINI_API_KEY=<YOUR_API_KEY>
+   - PORT=5000
 5. Run the Flask server:
 
    python app.py
