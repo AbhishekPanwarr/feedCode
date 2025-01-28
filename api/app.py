@@ -25,6 +25,8 @@ jwt = JWTManager(app)
 uri = f'mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@feedcodeusers.ujwgd.mongodb.net/?retryWrites=true&w=majority&appName=feedCodeUsers'
 client = MongoClient(uri, server_api=ServerApi('1'))
 mongo = client.get_database('FeedCode')
+users_collection = mongo.get_collection('users')
+solutions_db = mongo.get_collection('Solutions')
 
 # Check MongoDB connection
 @app.route('/ping-db', methods=['GET'])
@@ -51,7 +53,6 @@ def login():
 def loginUser():
     username = request.json.get("username")
     password = request.json.get("password")
-    users_collection = mongo.get_collection('users')
     if sha256_crypt.verify(password, users_collection.find_one({"username":username})["password"]):
 
         _id = str(users_collection.find_one({"username":username})["_id"])
@@ -92,25 +93,33 @@ def scrape():
 
 @app.route('/generate-reasoning', methods=["POST", "GET"])
 def get_reasoning():
+    # Get all files sorted in reverse order and take first 5
     problem_names = sorted([sol for sol in os.listdir("./solved_problems")], reverse=True)[0:5]
     problem_names_db = []
     answers = []
     master_answers = []
 
     for problem in problem_names:
-        name = problem.split(" ")[1:]
-        name = " ".join(name)
-        problem_names_db.append(name[:-2])
+        name = problem.split(" ", 1)[1]  # Split only at first space
+        name = name[:-2]  # Remove the .cc extension
+        problem_names_db.append(name)
+
+    print(problem_names_db)
+    print(solutions_db)
 
     for problem_name in problem_names:
         with open(f"./solved_problems/{problem_name}") as sol:
             text = sol.read()
             answers.append(text)
 
-    solutions_db = mongo.get_collection('Solutions')
     for problem in problem_names_db:
-        x = solutions_db.find({"name": problem})['answer']
-        master_answers.append(x)
+        document = solutions_db.find_one({'name':problem})
+        if document:
+            sol = document.get('answer', 'Answer not found')
+        else:
+            sol = 'Problem not found'
+            
+        master_answers.append(sol)
         
     prompt = prompting.prompt(tester_list=answers, master_list=master_answers)
     reasoning_gemini = reasoning(prompt)
