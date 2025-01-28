@@ -2,5 +2,7 @@
 .env
 feedcode/
 solved_problems/
+venv_feedcode/
 # Ignore __pycache__ directories
 __pycache__/
+.vercel
