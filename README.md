@@ -26,8 +26,9 @@ This project is developed under the [**Data Science Group (DSG)**](https://githu
 2. **Comparison with Master Solutions**: Compare the user's current code snippet with master solutions of the same questions.  
 3. **Feedback Generation**: Pass the reasoning and code snippets to the second language model (LLM2) to generate insightful feedback.  
 
-- *Note : Here we have choose CSES platform to scrape user's solution because of the simple nature of the website*
-- *Note : User must have atleast 5 questions solved in his/her CSES account to be able to use feedCode*
+> [!Note]
+> Here we have choose CSES platform to scrape user's solution because of the simple nature of the website*
+>  User must have atleast 5 questions solved in his/her CSES account to be able to use [feedCode](https://feedcode.onrender.com/signup_page).
 ---
 
 ## Tech Stack  
