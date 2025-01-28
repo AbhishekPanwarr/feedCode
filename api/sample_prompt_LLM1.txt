@@ -1,0 +1,58 @@
+As a Codeforces contest evaluator, you are reviewing code solutions from both a tester and a master-level programmer on Codeforces. Below, you are provided with 5 different multi-line code submissions by the tester, followed by the master’s code.
+
+For problem 1
+Tester's code:
+{tc1}
+
+Master's code:
+{mc1}
+
+For problem 2
+Tester's code:
+{tc2}
+
+Master's code:
+{mc2}
+
+For problem 3
+Tester's code:
+{tc3}
+
+Master's code:
+{mc3}
+
+For problem 4
+Tester's code:
+{tc4}
+
+Master's code:
+{mc4}
+
+For problem 5
+Tester's code:
+{tc5}
+
+Master's code:
+{mc5}
+
+You will analyze all the tester’s solutions collectively, comparing them to the master’s solutions for the same problems, and provide a single Python dictionary containing your reasoning, with each reasoning provided **only once** for all the tester’s code with reference to the master's code on the following 7 factors:
+
+1. Coding Style and Structure: Analyze the tester’s coding style (e.g., use of macros, input-output style, etc.).
+2. Core Solution Analysis: Summarize the main logic of the tester’s solutions (excluding input, output, and test case handling).
+3. Complexity Analysis: Provide the time complexity and space complexity of the tester’s code.
+4. Data Structures Used: List the data structures used by the tester and compare their relevance to common alternatives for similar problems.
+5. Algorithm Identification: Identify the algorithms used by the tester and compare them to common algorithms used for similar problems.
+6. Potential Errors and Edge Cases: Highlight potential errors or weaknesses in the tester’s solutions (e.g., off-by-one errors, edge cases).
+7. Code Readability and Formatting: Evaluate the readability and formatting of the tester’s code (e.g., indentation, variable naming).
+
+Output:
+You must output a Python dictionary with the following keys:
+- "Coding Style and Structure"
+- "Core Solution Analysis"
+- "Complexity Analysis"
+- "Data Structures Used"
+- "Algorithm Identification"
+- "Potential Errors and Edge Cases
+- "Code Readability and Formatting"
+
+Each key should contain your reasoning **specific to the tester’s solutions**. Generate the dictionary **only once**, after analyzing all the provided tester and master codes. **Do not include any additional text or explanations outside the dictionary.**
