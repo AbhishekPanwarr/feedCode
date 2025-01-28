@@ -74,6 +74,6 @@ This project is developed under the [**Data Science Group (DSG)**](https://githu
    - GEMINI_API_KEY=<YOUR_API_KEY>
    - PORT=5000
 5. Run the Flask server:
-
+   ```bash
    python app.py
   
