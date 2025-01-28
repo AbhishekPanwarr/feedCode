@@ -3,6 +3,9 @@
 > [!TIP]
 > Visit the website and get Feedback of your codes! [FeedCode](https://feedcode.onrender.com/login_page)
 
+Demo video can be accessed [Here](https://www.loom.com/share/31529224bef444958fcee1ed89037528)
+![](https://github.com/AbhishekPanwarr/feedCode/blob/main/media/feedcode_demo.gif)
+
 FeedCode is an intelligent feedback tool that provides personalized code reviews based on your coding style and activity. It leverages machine learning to analyze your frequently solved coding problems and generates insightful, context-aware feedback to help you improve your code quality and optimization skills. 
 
 > FeedCode works on questions from [CSES Problem Set](https://cses.fi/problemset/) 
