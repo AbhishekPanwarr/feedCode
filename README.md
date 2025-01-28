@@ -57,23 +57,24 @@ This project is developed under the [**Data Science Group (DSG)**](https://githu
    git clone https://github.com/your-username/feedcode.git  
    cd feedcode  
 2. Create a virtual environment:
-
+   ```python 
    python3 -m venv venv  
    source venv/bin/activate  # For Linux/Mac  
    venv\Scripts\activate     # For Windows
 3. Install the required dependencies:
-
+   ```python
    pip install -r requirements.txt
 4. Set up the .env file:
 
    Create a .env file in the root directory with the following keys:
+   ```python
    - JWT_SECRET_KEY=<ANY>
    - MONGO_USER=<MONGO_USERNAME>
    - MONGO_PASSWORD=<MONGO_PASSWORD>
    - CLIENT_URL=http://localhost:3000
    - GEMINI_API_KEY=<YOUR_API_KEY>
    - PORT=5000
-5. Run the Flask server:
-   ```bash
+6. Run the Flask server:
+   ```python
    python app.py
   
