@@ -35,7 +35,7 @@ Tester's code:
 Master's code:
 {mc5}
 
-You will analyze all the tester’s solutions collectively, comparing them to the master’s solutions for the same problems, and provide a single Python dictionary containing your reasoning, with each reasoning provided **only once** for all the tester’s code with reference to the master's code on the following 7 factors:
+You will analyze all the tester’s solutions collectively, comparing them to the master’s solutions for the same problems, and provide a single Python dictionary containing your reasoning, with each reasoning provided only once for all the tester’s code with reference to the master's code on the following 7 factors:
 
 1. Coding Style and Structure: Analyze the tester’s coding style (e.g., use of macros, input-output style, etc.).
 2. Core Solution Analysis: Summarize the main logic of the tester’s solutions (excluding input, output, and test case handling).
@@ -44,6 +44,8 @@ You will analyze all the tester’s solutions collectively, comparing them to th
 5. Algorithm Identification: Identify the algorithms used by the tester and compare them to common algorithms used for similar problems.
 6. Potential Errors and Edge Cases: Highlight potential errors or weaknesses in the tester’s solutions (e.g., off-by-one errors, edge cases).
 7. Code Readability and Formatting: Evaluate the readability and formatting of the tester’s code (e.g., indentation, variable naming).
+
+Make sure to be extract out reasoning specific to tester's coding style and his/her habits, with no mention of any particular problem whatsoever he/she has solved
 
 Output:
 You must output a Python dictionary with the following keys:
@@ -55,4 +57,5 @@ You must output a Python dictionary with the following keys:
 - "Potential Errors and Edge Cases
 - "Code Readability and Formatting"
 
-Each key should contain your reasoning **specific to the tester’s solutions**. Generate the dictionary **only once**, after analyzing all the provided tester and master codes. **Do not include any additional text or explanations outside the dictionary.**
+Each key should contain your reasoning specific to the tester’s solutions. Generate the dictionary only once, after analyzing all the provided tester and master codes. Do not include any additional text or explanations outside the dictionary.
+
